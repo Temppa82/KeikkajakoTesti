@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lähetejako – tietosuojaseloste</title>
+  <style>body{margin:0;background:#f1f2f3;color:#25282c;font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:850px;margin:auto;padding:32px 20px 64px}article{background:#fff;border:1px solid #d7d9dc;border-radius:12px;padding:clamp(22px,5vw,48px)}h1,h2{line-height:1.2}h2{margin-top:2rem}a{color:#315f8c}code{background:#eef0f2;padding:.15rem .3rem;border-radius:4px}.muted{color:#646970}</style>
+</head>
+<body><main><article>
+  <p><a href="index.html">← Takaisin Lähetejako-ohjelmaan</a></p>
+  <h1>Tietosuojaseloste</h1>
+  <p class="muted">Päivitetty 6.9.2026</p>
+  <p>Lähetejako on Teemu H. Fingerroosin ylläpitämä kuljetusten suunnittelu- ja toimitusasiakirjojen käsittelysovellus. Yhteyden saa <a href="https://github.com/Temppa82">ylläpitäjän GitHub-profiilin</a> kautta. Älä julkaise henkilötietoja julkiseen GitHub-keskusteluun.</p>
+
+  <h2>Mitä tietoja sovellus käsittelee?</h2>
+  <p>Sovellus voi käsitellä käyttäjän valitsemia PDF-lähetteitä, vastaanottajien nimiä, osoitteita, puhelinnumeroita, toimitusohjeita, seurantanumeroita, tavaramääriä, kuittauksia ja varaumia. Käyttäjä voi lisäksi tallentaa kohdekohtaisia yhteyshenkilöitä, puhelinnumeroita, ovikoodeja, kulkuohjeita ja muita toimituksessa tarvittavia tietoja.</p>
+  <p>Kuljettajan nimi, ajoneuvon rekisterinumero, kapasiteetti, navigaattorivalinta, käyttöliittymävalinnat, palveluavaimet ja muut henkilökohtaiset asetukset tallennetaan käytettävän laitteen selaimeen, eikä niitä siirretä yhteiseen asiakasrekisteriin. Keskeneräinen työtila ja muokatut PDF:t voidaan tallentaa selaimen paikalliseen tallennustilaan.</p>
+  <p>Ajojärjestelijän valinnainen oppimistoiminto tallentaa käsin tehtyjen autosiirtojen paikallisen historian tälle laitteelle. Historiaa ei siirretä yhteiseen AppInfo-tiedostoon, ja sen voi poistaa ohjelman oppimisasetuksista.</p>
+
+  <h2>Google Drive</h2>
+  <p>Google Drive yhdistetään vain käyttäjän omasta toimesta. Jaettujen kansioiden ja muiden käyttäjien lisäämien kohdetietojen automaattinen käsittely käyttää <code>drive</code>-oikeutta. Googlen myöntämä lupa mahdollistaa koko Driven lukemisen ja muokkaamisen. Yhdistämisen jälkeen sovellus käyttää tällä laitteella muistettua juurikansiota tai etsii käyttäjälle näkyvistä kansioista täsmälleen Rahtikirjat-nimisen muokattavan kansion. Jos sopivia kansioita on useita, käyttäjä valitsee oikean käsin. Sovelluksen varsinainen tallennus ja kohdetietojen käsittely kohdistetaan tähän juurikansioon. PDF:t tallennetaan käyttäjän valitseman ajopäivän päivämääräkansioihin. Käyttäjien lisäämät kohdetiedot, käsin korjatut osoitteet ja kartalta valitut purkupaikkojen koordinaatit tallennetaan yhteiseen tiedostoon <code>Rahtikirjat/AppInfo/asiakkaat.json</code>. Samaa juurikansiota käyttävät henkilöt voivat lukea ja päivittää näitä yhteisiä tietoja. Tiedostosta pidetään laitteella paikallinen välimuisti, ja verkkokatkon aikana tehdyt muutokset säilytetään paikallisessa synkronointijonossa.</p>
+  <h2>Paikallinen Drive-kansio</h2>
+  <p>Tuetussa työpöytäselaimessa käyttäjä voi valita Google Drive for desktopin synkronoiman Rahtikirjat-kansion selaimen omalla kansiovalitsimella. Kansiokahva säilytetään IndexedDB:ssä ja käyttöoikeus tarkistetaan myöhemmillä käyttökerroilla. Tässä tallennustavassa PDF:t ja <code>AppInfo/asiakkaat.json</code> kirjoitetaan suoraan valittuun paikalliseen kansioon ilman Drive API:a tai Drive OAuth -lupaa. Selain ei pysty tarkistamaan, milloin Drive for desktop on synkronoinut paikallisen muutoksen pilveen. Epäonnistuneet kirjoitukset säilytetään paikallisessa varmistuksessa myöhempää uusintaa varten.</p>
+  <p>Drive-tiedostoihin pääsevät ne henkilöt, joille valitun Google Drive -kansion omistaja tai ylläpitäjä on myöntänyt oikeuden. Käyttäjä ja kansion ylläpitäjä vastaavat käyttöoikeuksien asianmukaisuudesta.</p>
+
+  <h2>Gmail</h2>
+  <p>Gmail-yhteys käyttää vain lukuoikeutta <code>gmail.readonly</code>. Sovellus hakee käyttäjän valitseman päivän viesteistä PDF- ja ZIP-liitteitä ja tuo vain käyttäjän valitsemat liitteet ohjelmaan. ZIP-paketeista käsitellään ohjelmaan tuotavat PDF-lähetteet. Sovellus ei lähetä, muuta eikä poista sähköposteja. Gmailin ja Google Driven käyttöoikeustunnukset pidetään vain käynnissä olevan selainistunnon muistissa eikä niitä tallenneta pysyvästi.</p>
+
+  <h2>Muut verkkopalvelut</h2>
+  <p>Osoitteita ja koordinaatteja voidaan lähettää geokoodaus- ja reitityspalveluihin karttapisteiden ja ajoreittien laskemiseksi. Näihin palveluihin ei ole tarkoitus lähettää PDF-asiakirjoja, kuittauksia, ovikoodeja tai muuta tarpeetonta sisältöä.</p>
+  <p>Sovellussivu, karttatiilet ja ohjelmakirjastot ladataan GitHub Pagesista ja ulkoisista jakelupalveluista. Verkkopyyntöjen vastaanottajat saavat yhteyden toiminnan edellyttämät tekniset tiedot, kuten IP-osoitteen. Navigointia avattaessa kohteen osoite tai koordinaatit välitetään käyttäjän valitsemalle navigointipalvelulle.</p>
+  <p>Google-palveluista saatuja tietoja käytetään vain käyttäjän pyytämiin lähetteen käsittely-, tallennus- ja kohdetietotoimintoihin. Sovellus ei myy tietoja, käytä niitä mainontaan tai tekoälymallien kouluttamiseen. Tietojen käyttö ja siirrot noudattavat <a href="https://developers.google.com/workspace/workspace-api-user-data-developer-policy">Google API -käyttäjätietokäytäntöä ja sen Limited Use -vaatimuksia</a>.</p>
+
+  <h2>Säilytys ja poistaminen</h2>
+  <p>Keskeneräinen työtila voidaan tyhjentää Aloita alusta -painikkeella. Asetuksia, valittua paikallista kansiokahvaa, asiakasrekisterin välimuistiä, synkronointia odottavia muutoksia, osoitekorjauksia ja paikallisia PDF-varmuuskopioita voi jäädä selaimeen tämän jälkeen; kaikkien paikallisten tietojen poistaminen tehdään selaimen sivustotietojen tyhjennyksellä. Google Driveen tai synkronoituun paikalliseen kansioon tallennetut tiedot säilyvät, kunnes käyttäjä tai kansion ylläpitäjä poistaa ne. Yhteiset kohdetiedot ovat <code>asiakkaat.json</code>-tiedostossa. Ennen versiota 1.79 luodut erilliset AppInfo-tiedostot jätetään migraatiossa Driveen varmuuskopioiksi. Sovelluksen ylläpitäjä ei ylläpidä erillistä palvelintietokantaa käyttäjien lähetteille.</p>
+
+  <h2>Käyttäjän valinnat</h2>
+  <p>Google-yhteyden voi katkaista ohjelman asetuksista ja käyttöoikeuden voi poistaa Google-tilin suojausasetuksista. Käyttäjä voi tarkastaa, korjata ja poistaa Driveen tallennettuja tiedostoja omien Drive-oikeuksiensa mukaisesti.</p>
+</article></main></body></html>
