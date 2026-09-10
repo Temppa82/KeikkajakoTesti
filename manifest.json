@@ -2,7 +2,7 @@
   "name": "Lähetejako",
   "short_name": "Lähetejako",
   "id": "./",
-  "description": "Jaa lähetteet kuskien kesken. Versio 1.87 – Teemu H. Fingerroos",
+  "description": "Jaa lähetteet kuskien kesken. Versio 1.88 – Teemu H. Fingerroos",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
