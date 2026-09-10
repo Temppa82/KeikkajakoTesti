@@ -1,8 +1,25 @@
-# Lähetejako v1.86
+# Lähetejako v1.87
 
 **Tekijä:** Teemu H. Fingerroos
 
 Selainpohjainen työkalu, jolla jaat Pamark-tyyliset lähetteet (PDF) kuljettajien kesken.
+
+## Versio 1.87
+
+- Kaikkien vaiheiden PDF-esikatseluista voi korjata toimitusosoitteen ja valita tarkan purkupaikan kartan keskellä olevalla nuppineulalla. Sama korjaus päivittyy nykyiseen keikkaan, paikalliseen muistiin ja käytössä olevaan yhteiseen `AppInfo/asiakkaat.json`-tiedostoon.
+- Drive-pyynnöt uusivat vanhentuneen access tokenin, yrittävät 401-pyynnön kerran uudelleen ja käyttävät 429-, 5xx- ja verkkovirheissä exponential backoffia.
+- Drive-PDF tallennetaan ensin IndexedDB-jonoon. Onnistunut saman nimisen tiedoston päivitys poistaa jonotietueen; katkennut yhteys ei hävitä PDF:ää tai AppInfo-muutosta.
+- Google-valtuutus ja hetkellinen Drive-verkkoyhteys ovat erillisiä tiloja. Verkkovirhe ei kirjaa käyttäjää ulos eikä unohda Rahtikirjat-kansion tunnistetta.
+- Tekninen Drive-loki näyttää uusinnat, HTTP-tilat ja retryt, mutta ei koskaan tokeneita tai client secretiä.
+- `oauth-backend`-hakemisto sisältää valinnaisen tuotantopalvelimen, joka säilyttää refresh tokenin palvelimella salattuna ja palauttaa selaimelle vain lyhytikäisen access tokenin.
+
+### Drive-kirjautumisen kaksi käyttötilaa
+
+Ilman OAuth-palvelinta sovellus käyttää Google Identity Servicesin selaimen tokenimallia. Token uusitaan automaattisesti niin pitkälle kuin Google-istunto ja selaimen popup-/evästekäytännöt sallivat, mutta puhdas GitHub Pages -sivu ei saa refresh tokenia eikä voi luvata täysin taustalla tapahtuvaa palautusta selaimen sulkemisen yli.
+
+Tuotantokäytössä julkaise `oauth-backend` HTTPS-palvelimelle ja syötä sen osoite asetuksiin. Authorization Code -mallissa refresh token ja client secret pysyvät palvelimella. Jos Google ei palauta uudessa vaihdossa refresh tokenia, palvelin säilyttää aiemman arvon eikä korvaa sitä tyhjällä.
+
+Nykyinen scope on `https://www.googleapis.com/auth/drive`. Se tarvitaan, koska sovellus etsii käyttäjän tai hänelle jaetun Rahtikirjat-kansion, lukee sen ennestään olemassa olevia tiedostoja ja päivittää niitä ilman, että jokainen tiedosto valitaan Pickerillä erikseen. Tämä on Googlen luokituksessa rajoitettu scope, joten julkinen tuotantosovellus tarvitsee OAuth-verifioinnin ja Google voi vaatia lisäarvioinnin. Pelkkä `drive.file` ei vastaa nykyistä automaattista olemassa olevien yhteisten tiedostojen käsittelytapaa.
 
 ## Versio 1.86
 
@@ -147,16 +164,18 @@ Selainpohjainen työkalu, jolla jaat Pamark-tyyliset lähetteet (PDF) kuljettaji
 6. Syötä asiakastunnus ja API-avain Kuljettajan asetuksiin ja paina **Yhdistä Google Drive**. Ohjelma etsii täsmälleen **Rahtikirjat**-nimisen muokattavan kansion automaattisesti. Valitse kansio käsin vain, jos sitä ei löydy tai samannimisiä kansioita on useita.
 7. OAuthin kotisivuksi voi antaa GitHub Pages -osoitteen. Tietosuojaseloste löytyy osoitteesta `privacy.html` ja käyttöehdot osoitteesta `terms.html`.
 
-### v1.86 käyttöön vaiheittain
+### v1.87 käyttöön vaiheittain
 
 1. Pura ZIP ja lataa lahete-jako-app-kansion sisältö GitHub-repositorion juureen. Erillisiä v1.73–v1.75-päivityksiä ei tarvita. Poista GitHubissa oleva vanha irrallinen PDF erikseen, jos et halua sitä julkiseksi; päivityspaketti ei poista repositorion muita tiedostoja.
-2. Tarkista, että sovelluksessa näkyy v1.86. OAuth-sivut toimivat julkaisemisen jälkeen osoitteissa `https://temppa82.github.io/Keikkajako/privacy.html` ja `https://temppa82.github.io/Keikkajako/terms.html`. Lue tekstit ja varmista ylläpitäjän tiedot ennen niiden käyttöä.
+2. Tarkista, että sovelluksessa näkyy v1.87. OAuth-sivut toimivat julkaisemisen jälkeen osoitteissa `https://temppa82.github.io/Keikkajako/privacy.html` ja `https://temppa82.github.io/Keikkajako/terms.html`. Lue tekstit ja varmista ylläpitäjän tiedot ennen niiden käyttöä.
 3. Ota samassa Google Cloud -projektissa käyttöön Gmail API, Google Drive API ja Google Picker API. Käytä samaa OAuth-asiakastunnusta kaikilla kuljettajilla. JavaScript-origin on `https://temppa82.github.io` ilman polkua. Rajaa Pickerin API-avain sivustolle `https://temppa82.github.io/*` ja Google Picker API:lle.
 4. Drive- ja Gmail-luvat kuuluvat Googlen restricted scope -luokkaan. Julkinen käyttö voi vaatia Googlen OAuth-tarkistuksen. Testaustilassa käytä lisättyjä testikäyttäjiä; pelkkä HTML-sivujen julkaisu ei takaa Googlen hyväksyntää.
 5. Yhdistä Drive uudelleen asetuksista ja hyväksy lupa. Ohjelma löytää yhden muokattavan Rahtikirjat-kansion automaattisesti. Jos samannimisiä kansioita on useita, valitse oikea käsin. Jokainen käyttäjä tarvitsee kansion kirjoitusoikeuden. Ohjelma ei muuta kansion jakamisasetuksia.
 6. Valitse ajopäivä ja anna PDF:lle nimi. Esimerkiksi 6.9. valmisteltavat 7.9. keikat tallentuvat polkuun `Rahtikirjat/2026/Syyskuu/07092026/tiedosto.pdf`. Ensimmäinen tallennus lukitsee ajopäivän, ja saman työn myöhemmät tallennukset pysyvät tässä kansiossa myös yön yli. Aloita alusta aloittaa uuden työn.
 7. Kohteen Info löytyy PDF-listasta, reittilistasta, lastauksesta ja kuljetuksesta. Kohdetiedot ja osoitekorjaukset yhdistetään asiakasnumeron, vastaanottajan ja alkuperäisen toimitusosoitteen avulla yhteen `Rahtikirjat/AppInfo/asiakkaat.json`-tiedostoon. Sovellus lukee tuoreen version ennen muutosta ja yrittää uudelleen, jos toinen käyttäjä ehti päivittää tiedostoa. Vanhanmalliset erilliset JSON-tiedostot jäävät Driveen varmuuskopioiksi migraation jälkeen.
 8. Hae Gmailista valitsee viestien vastaanottopäivän (ei lähetteen toimituspäivää). Rastita halutut PDF-liitteet ja paina Tuo valitut. Lähetetyt viestit ohitetaan. Sähköposteja ei muuteta eikä poisteta. Gmail-kirjautuminen tehdään erikseen; tili voi olla eri kuin Drive-tili.
+9. Jos haluat valtuutuksen uusiutuvan myös selaimen sulkemisen jälkeen ilman uutta Google-ikkunaa, julkaise mukana oleva `oauth-backend` HTTPS-palvelimelle ja syötä sen osoite asetusten **OAuth-palvelimen osoite** -kenttään. Palvelimen oma README sisältää ympäristömuuttujat ja täsmälliset Cloud Console -asetukset. Älä koskaan lisää client secretiä GitHub Pages -tiedostoihin.
+10. Google Cloudin **Testing**-tilassa testikäyttäjän valtuutus vanhenee seitsemässä päivässä. Pitkäkestoista tuotantokäyttöä varten sovellus on siirrettävä tuotantotilaan. Nykyinen `drive`-oikeus on rajoitettu scope, joten julkinen käyttö vaatii Googlen OAuth-verifioinnin ja voi vaatia turvallisuusarvioinnin.
 
 Google-tilien välisiä oikeuksia ja julkaistua OAuth-kirjautumista on testattava omilla tileillä käyttöönotossa. Paketissa ei ole asiakkaiden PDF:iä, palveluavaimia eikä ovikoodeja.
 
