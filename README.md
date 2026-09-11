@@ -6,16 +6,10 @@ Selainpohjainen työkalu, jolla jaat Pamark-tyyliset lähetteet (PDF) kuljettaji
 
 ## Versio 1.90
 
-- Kuljetusvaiheen tekninen PDF-tallennuslaatikko on poistettu päänäkymästä. Samat tiedostonimi-, laitetallennus-, kansio-, Drive-polku- ja synkronointitiedot löytyvät kuljettajan Asetukset-valikon PDF-tallennus-kohdasta.
-- Kuljetuksen alapalkissa ovat kompaktit **💾 PDF**, **💾 ☁ PDF** ja **⚙**. Ne käyttävät samoja paikallisen PDF:n tallennus-, Drive-vienti- ja asetusfunktioita kuin aikaisemmat painikkeet.
-- Kuljetusnäkymän välit on tiivistetty tärkeää keikkatekstiä pienentämättä. Android-kokoisella näytöllä alapalkki pysyy ensisijaisesti yhdellä rivillä eikä aiheuta vaakavieritystä.
-- Ajojärjestelijän päänäkymässä on Asetukset-ratas. Ajoneuvot ja aluevalinnat on siirretty sen Alueet- ja Ajoneuvot-välilehdille.
-- Ajojärjestelijän asetukset tallennetaan rakenteeseen `lahetejako_dispatcher_settings_v1`. Ajoneuvolla on pysyvä ID, rekisterinumero, aktiivisuustila, kapasiteetti, kapasiteettityyppi ja yksittäisen keikan tilavuusraja.
-- Jokainen alue–ajoneuvo-yhteys on oma numeroitu tietueensa, jolla on pysyvä ID, nimi, nykyinen postinumeroaluemääritys, ajoneuvon ID sekä pää-/tasausalueen tyyppi. Alueita ja ajoneuvoja voi lisätä, muokata ja poistaa käytöstä ilman kiinteää lukumäärää.
-- Sama maantieteellinen alue voidaan säilyttää usean auton käytössä erillisinä pää- tai tasausaluetietueina. Tämä säilyttää esimerkiksi tarkoitukselliset päällekkäisyydet ja nykyisen jakoalgoritmin toiminnan.
-- Jos alueeseen liitetty ajoneuvo poistetaan, alue säilyy ja näyttää **Ajoneuvo puuttuu**. Uusi ajoneuvo valitaan pudotusvalikosta.
-- Ensimmäinen käynnistys migroi nykyisen `lahetejako_fleet`-kaluston, kapasiteetit sekä pää- ja tasausalueet uuteen malliin. Uusi asetustallennus estää migraation toistamisen ja kaksoiskappaleet.
-- Jakoalgoritmi käyttää edelleen olemassa olevaa `fleet`-rakennetta, joka muodostetaan uudesta rekisteristä. PDF-, reitti-, lastaus-, kuljetus-, kuittaus-, kartta-, navigointi-, Drive- ja AppInfo-toimintoja ei korvattu.
+- Versio perustuu suoraan version 1.89 toimivaan keikkajako- ja aluevalintarakenteeseen. Jakotapaa tai sen tallennusmallia ei ole muutettu.
+- Ajojärjestelijän nykyiset ajoneuvoslotit näkyvät asetuksissa nimillä **Alue 1, Alue 2, Alue 3…**. Rekisterinumero, kapasiteetti sekä pää- ja tasausalueet säilyvät slotin tiedoissa ennallaan.
+- Ajoneuvo- ja aluevalinnat on siirretty pois päivittäisestä työnäkymästä ajojärjestelijän rataskuvakkeen taakse.
+- Kuljetusnäkymä on tiivistetty: tekninen PDF-tallennusinfo löytyy kuljettajan asetuksista ja alareunassa ovat kompaktit **💾 PDF**, **💾 ☁ PDF** ja **⚙** -painikkeet.
 
 ## Versio 1.89
 

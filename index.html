@@ -699,15 +699,8 @@
     #driverView.driver-phase-transport #driverTransportCard { padding-top:.65rem; }
     #driverView.driver-phase-transport .driver-phase-top { margin-bottom:.2rem; }
     #driverView.driver-phase-transport #driverTransportIntro { margin:.15rem 0 .45rem; }
-    .dispatcher-settings-tabs { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; margin:.75rem 0; }
-    .dispatcher-settings-panel[hidden] { display:none; }
-    .dynamic-area-list, .vehicle-registry-list { display:grid; gap:.65rem; }
-    .dynamic-area-row { padding:.75rem; border:1px solid var(--border); border-radius:9px; background:var(--bg); }
-    .dynamic-area-grid { display:grid; grid-template-columns:minmax(7rem,.65fr) minmax(12rem,1.5fr) minmax(9rem,1fr) minmax(7rem,.8fr) auto; gap:.55rem; align-items:end; }
-    .dynamic-area-grid label, .vehicle-editor-grid label { min-width:0; font-size:.75rem; color:var(--muted); }
-    .dynamic-area-grid input, .dynamic-area-grid select, .vehicle-editor-grid input, .vehicle-editor-grid select { width:100%; margin-top:.25rem; }
-    .vehicle-editor-grid { display:grid; grid-template-columns:minmax(9rem,1fr) minmax(7rem,.7fr) minmax(8rem,.8fr) minmax(9rem,1fr) auto; gap:.55rem; align-items:end; }
-    .dispatcher-settings-toolbar { display:flex; flex-wrap:wrap; gap:.55rem; margin:.65rem 0; }
+    .dispatcher-settings-slot-title { font-weight:800; color:var(--accent); font-size:.8rem; margin-bottom:.12rem; }
+    .dispatcher-settings-columns { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem; }
     .gmail-results { max-height:44vh; overflow:auto; display:grid; gap:.45rem; margin-top:.75rem; }
     .gmail-result { display:grid; grid-template-columns:auto minmax(0,1fr); gap:.65rem; align-items:start; padding:.7rem; border:1px solid var(--border); border-radius:8px; background:var(--bg); }
     .gmail-result small { display:block; margin-top:.25rem; color:var(--muted); overflow-wrap:anywhere; }
@@ -744,6 +737,10 @@
       #driverPhaseSwitcher { grid-template-columns:repeat(2,minmax(0,1fr)) !important; position:relative !important; top:auto !important; }
       #driverPhaseSwitcher .btn { padding:.55rem .35rem; font-size:.78rem; }
       .fleet-row { grid-template-columns: 36px 1fr 80px; }
+      #dispatcherSettingsModal .fleet-row { grid-template-columns:36px minmax(0,1fr); align-items:start; }
+      #dispatcherSettingsModal .fleet-areas { grid-column:1 / -1; overflow-wrap:anywhere; line-height:1.4; }
+      #dispatcherSettingsModal .fleet-capacity-controls { grid-column:1 / -1; display:grid; grid-template-columns:minmax(0,1fr) 72px auto; gap:.35rem; align-items:center; }
+      #dispatcherSettingsModal .fleet-capacity-controls > div { margin:0 !important; text-align:left !important; }
       #settingsCard > div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
       .driver-route-settings { grid-template-columns: 1fr; }
       .driver-route-stop { grid-template-columns: 34px minmax(0, 1fr); }
@@ -763,8 +760,7 @@
       .transport-utility-bar { grid-template-columns:minmax(0,1fr) minmax(0,1fr) 52px; gap:.4rem; }
       .transport-utility-bar .btn { min-height:52px; padding:.55rem .35rem; font-size:.92rem; }
       .transport-utility-bar .settings-icon { width:52px; font-size:1.25rem; }
-      .dynamic-area-grid, .vehicle-editor-grid { grid-template-columns:1fr 1fr; }
-      .dynamic-area-grid .btn, .vehicle-editor-grid .btn { width:100%; }
+      .dispatcher-settings-columns { grid-template-columns:1fr; }
       #driverView.driver-phase-loading > .container,
       #driverView.driver-phase-transport > .container { padding:0; }
       #driverView.driver-phase-loading #driverLoadingCard,
@@ -803,7 +799,10 @@
   <main class="mode-view" id="dispatcherView" role="tabpanel" aria-labelledby="dispatcherTab">
   <div class="container">
     <div class="card">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.5rem;"><h2 style="margin:0;">1. Raahaa lähetteet</h2><button class="btn btn-secondary" id="btnDispatcherSettings" type="button" aria-label="Asetukset" title="Ajojärjestelijän asetukset" style="min-width:52px;font-size:1.25rem;justify-content:center;">⚙</button></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.5rem;">
+        <h2 style="margin:0;">1. Raahaa lähetteet</h2>
+        <button class="btn btn-secondary" id="btnDispatcherSettings" type="button" aria-label="Asetukset" title="Ajojärjestelijän asetukset" style="min-width:52px;font-size:1.25rem;justify-content:center;">⚙</button>
+      </div>
       <div class="dropzone" id="dropzone">
         <div style="font-size: 2.5rem;">📄</div>
         <p><strong>Raahaa PDF- tai ZIP-tiedostot tähän</strong> tai klikkaa valitaksesi</p>
@@ -814,7 +813,8 @@
     </div>
 
     <div class="card" id="settingsCard" style="display: none;">
-      <div><h2 style="margin-bottom:.2rem;">2. Keikkajako</h2><p style="color:var(--muted);font-size:.9rem;margin:0;">Ajoneuvot ja alueet hallitaan Asetuksissa. Nykyiset valinnat säilyvät ja vaikuttavat jakoon.</p></div>
+      <h2>2. Keikkajako</h2>
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:.65rem;">Ajoneuvoslotit, kapasiteetit sekä pää- ja tasausalueet löytyvät ⚙ Asetuksista. Jakotapa on sama kuin versiossa 1.89.</p>
       <div class="actions">
         <button class="btn btn-primary" id="btnDistribute">Jaa keikat autoille</button>
         <select id="mapAssignVehicle" aria-label="Auto karttavalintaa varten" style="width:auto; min-width:130px; padding:0.55rem 0.7rem;">
@@ -1118,32 +1118,27 @@
         <h3 id="dispatcherSettingsTitle" style="margin:0;">⚙ Ajojärjestelijän asetukset</h3>
         <button class="btn btn-secondary" id="btnCloseDispatcherSettings" type="button">Sulje</button>
       </div>
-      <div class="dispatcher-settings-tabs" role="tablist" aria-label="Asetusryhmä">
-        <button class="btn btn-secondary active" type="button" data-dispatcher-settings-tab="areas" role="tab">Alueet</button>
-        <button class="btn btn-secondary" type="button" data-dispatcher-settings-tab="vehicles" role="tab">Ajoneuvot</button>
-      </div>
-      <section class="dispatcher-settings-panel" id="dispatcherAreasPanel" data-dispatcher-settings-panel="areas">
-        <p class="modal-file-meta">Jokainen rivi on oma pysyvä alue–ajoneuvo-yhteytensä. Sama postinumeroalue voi tarvittaessa kuulua usealle autolle pää- tai tasausalueena.</p>
-        <div class="dispatcher-settings-toolbar">
-          <button class="btn btn-primary" id="btnAddDispatcherArea" type="button">➕ Lisää alue</button>
-          <input id="areaFilterInput" type="search" placeholder="Hae alueella, autolla tai postinumerolla…" style="flex:1;min-width:14rem;" />
-        </div>
-        <span id="selectedVehicleLabel" hidden></span>
-        <div id="areaCheckboxes" class="dynamic-area-list"></div>
-        <details open style="margin-top:1rem;"><summary>Aluekartta</summary><div id="areaMap" style="height:360px;margin-top:.65rem;border-radius:8px;border:1px solid var(--border);background:#1a1a2e;z-index:1;"></div><p class="modal-file-meta" style="margin-top:.4rem;">Kartta näyttää nykyisten aluemääritysten sijainnit. Alueita muokataan yllä olevista riveistä.</p></details>
-      </section>
-      <section class="dispatcher-settings-panel" id="dispatcherVehiclesPanel" data-dispatcher-settings-panel="vehicles" hidden>
-        <p class="modal-file-meta">Ajoneuvon pysyvä tunniste säilyy, vaikka rekisterinumeroa muutetaan. Alueet viittaavat tähän tunnisteeseen eivätkä kuljettajan nimeen.</p>
-        <div class="dispatcher-settings-toolbar"><button class="btn btn-primary" id="btnAddDispatcherVehicle" type="button">➕ Lisää ajoneuvo</button></div>
-        <div id="fleetList" class="vehicle-registry-list"></div>
-      </section>
-      <div style="margin-top:1rem;padding:.75rem;border:1px solid var(--border);border-radius:8px;">
+      <p class="modal-file-meta" style="margin-top:.55rem;">Alue 1, Alue 2… ovat nykyiset ajoneuvoslotit. Valitse slotista rekisterinumero ja merkitse sille pää- ja tasausalueet kuten aikaisemmin.</p>
+      <div id="fleetList" style="margin-top:.8rem;"></div>
+      <div style="margin-top:.8rem;padding:.75rem;border:1px solid var(--border);border-radius:8px;">
         <label style="display:flex;gap:.6rem;align-items:center;"><input type="checkbox" id="dispatcherLearningEnabled" style="width:auto;"> <strong>Hyödynnä aikaisempia käsin tehtyjä jakoja</strong></label>
         <div class="modal-file-meta" style="margin-top:.35rem;">Toistuvat käsin tehdyt autosiirrot vaikuttavat ehdotukseen. Kapasiteetti, aluevalinnat ja autokiellot ovat aina tärkeämpiä.</div>
         <details style="margin-top:.55rem;"><summary>Opitut ehdotukset</summary><div id="dispatcherLearningRules" style="margin-top:.5rem;"></div><button class="btn btn-secondary" id="btnClearDispatcherLearning" type="button" style="margin-top:.5rem;">Tyhjennä oppimishistoria</button></details>
       </div>
+      <div class="dispatcher-settings-columns">
+        <div>
+          <h3 style="font-size:.95rem;margin-bottom:.5rem;">Aluevalinnat – <span id="selectedVehicleLabel">valitse sloti</span></h3>
+          <input id="areaFilterInput" type="search" placeholder="Hae alueella tai postinumerolla…" style="width:100%;margin-bottom:.65rem;padding:.55rem .7rem;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font:inherit;" />
+          <div id="areaCheckboxes" style="display:flex;flex-direction:column;gap:.35rem;"></div>
+        </div>
+        <div>
+          <h3 style="font-size:.95rem;margin-bottom:.5rem;">Kartta</h3>
+          <div id="areaMap" style="height:360px;border-radius:8px;border:1px solid var(--border);background:#1a1a2e;z-index:1;"></div>
+          <p class="modal-file-meta" style="margin-top:.4rem;">Karttaklikkaus vaihtaa 📍 pääaluetta. Punainen = ei millekään slotille. 📍 = pääalue, ⚖ = tasaus.</p>
+        </div>
+      </div>
       <div class="modal-actions">
-        <button class="btn btn-secondary" id="btnResetFleet" type="button">Palauta oletuskalusto ja alueet</button>
+        <button class="btn btn-secondary" id="btnResetFleet" type="button">Palauta oletusslotit ja alueet</button>
         <button class="btn btn-primary" id="btnDoneDispatcherSettings" type="button">Valmis</button>
       </div>
     </div>
@@ -1401,7 +1396,7 @@
   </div>
 
   <footer>
-    Lähetejako v1.90 · Teemu H. Fingerroos · <a href="privacy.html">Tietosuojaseloste</a> · <a href="terms.html">Käyttöehdot</a> · Tiivis kuljetusnäkymä ja dynaamiset ajojärjestelijän asetukset
+    Lähetejako v1.90 · Teemu H. Fingerroos · <a href="privacy.html">Tietosuojaseloste</a> · <a href="terms.html">Käyttöehdot</a> · Tiivis kuljetusnäkymä ja v1.89-jakotavan asetuksiin siirretty aluejako
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -3739,12 +3734,8 @@
     function updateDriverSettingsButton() {
       const identity = [driverName, driverPlate].filter(Boolean).join(" · ");
       btnDriverSettings.textContent = "⚙";
-      btnDriverSettings.title = identity ? `Asetukset · ${identity}` : "Asetukset";
+      btnDriverSettings.title = identity ? `Asetukset · ${identity}` : "Kuljettajan asetukset";
       btnDriverSettings.setAttribute("aria-label", btnDriverSettings.title);
-      if (btnDriverTransportSettings) {
-        btnDriverTransportSettings.title = btnDriverSettings.title;
-        btnDriverTransportSettings.setAttribute("aria-label", btnDriverSettings.title);
-      }
     }
     updateDriverSettingsButton();
 
@@ -5913,15 +5904,16 @@
     });
     btnOptimizeDriverRoute.addEventListener("click", () => optimizeDriverRoute(false));
     async function handleExplicitDriverDriveSave(button) {
+      const compact = button === btnSaveDriverTransportToDrive;
       button.disabled = true;
-      button.innerHTML = `<span class="spinner"></span> Tallennetaan…`;
+      button.innerHTML = `<span class="spinner"></span> ${compact ? "Drive…" : "Tallennetaan Driveen…"}`;
       try {
         await saveDriverWorkToDrive();
       } catch (error) {
         if (error?.code !== "FILE_NAME_REQUIRED") updateDriverCloudSyncStatus(`Drive-tallennus epäonnistui: ${error.message || String(error)}`);
       } finally {
         button.disabled = false;
-        button.textContent = button === btnSaveDriverTransportToDrive ? "💾 ☁ PDF" : "☁️ Tallenna Driveen";
+        button.textContent = compact ? "💾 ☁ PDF" : "☁️ Tallenna Driveen";
       }
     }
     btnSaveDriverToDrive.addEventListener("click", () => handleExplicitDriverDriveSave(btnSaveDriverToDrive));
@@ -6173,7 +6165,7 @@
         try {
           await saveDriverWorkToDrive({dayEnd:true});
         } catch (error) {
-          updateDriverCloudSyncStatus(`Päivän päätös jäi kesken: ${error.message || String(error)}`);
+          driverCloudSyncStatus.innerHTML = `<strong style="color:var(--danger)">Päivän päätös jäi kesken:</strong> ${escapeHtml(error.message || String(error))}`;
           btnFinishDriverLoad.disabled = false;
           btnFinishDriverLoad.textContent = "✅ Päivän päätös";
           return;
@@ -6869,10 +6861,8 @@
         migrateLegacyAreas && LEGACY_AREA_EXPANSIONS[area] ? LEGACY_AREA_EXPANSIONS[area] : [area]
       ))].filter(area => ALL_AREAS.includes(area));
       return {
-        id: v.id || `vehicle-${stableInfoHash(String(v.plate || "vehicle").toUpperCase())}`,
-        plate: String(v.plate || "").trim().toUpperCase(),
-        capacity: Math.max(0.5, Number(v.capacity) || 1),
-        capacityType: v.capacityType === "volume" || (!v.capacityType && String(v.plate || "").toUpperCase() === SLT_PLATE) ? "volume" : "pallets",
+        plate: v.plate,
+        capacity: v.capacity,
         maxJobVolume: Math.max(0, Number(v.maxJobVolume) || 0),
         active: !!v.active,
         areas: expandAreas(v.areas),
@@ -6883,12 +6873,10 @@
     }
 
     function usesVolumeCapacity(vehicleOrPlate) {
-      if (vehicleOrPlate && typeof vehicleOrPlate === "object" && vehicleOrPlate.capacityType) return vehicleOrPlate.capacityType === "volume";
       const plate = typeof vehicleOrPlate === "string"
         ? vehicleOrPlate
         : (vehicleOrPlate?.plate || vehicleOrPlate?.name || "");
-      const registered = typeof fleet !== "undefined" ? fleet.find(item => item.plate === plate) : null;
-      return registered?.capacityType === "volume" || plate === SLT_PLATE;
+      return plate === SLT_PLATE;
     }
 
     function capacityAmountForStop(stop, vehicleOrPlate) {
@@ -6948,110 +6936,11 @@
       return DEFAULT_FLEET.map(vehicle => normalizeVehicle(vehicle, false));
     }
 
-    const DISPATCHER_SETTINGS_STORAGE_KEY = "lahetejako_dispatcher_settings_v1";
-
-    function nextDispatcherAreaNumber(records = []) {
-      return Math.max(0, ...records.map(record => Number(record.number) || 0)) + 1;
-    }
-
-    function migratedAreaRecords(vehicles, existing = []) {
-      const oldByKey = new Map(existing.map(record => [`${record.vehicleId}|${record.definitionArea}|${record.assignmentType}`, record]));
-      const records = [];
-      let nextNumber = nextDispatcherAreaNumber(existing);
-      vehicles.forEach(vehicle => {
-        [["primary", vehicle.areas || []], ["balance", vehicle.balanceAreas || []]].forEach(([assignmentType, areas]) => {
-          areas.forEach(definitionArea => {
-            const key = `${vehicle.id}|${definitionArea}|${assignmentType}`;
-            const old = oldByKey.get(key);
-            const number = old?.number || nextNumber++;
-            records.push({
-              id:old?.id || `area-${stableInfoHash(key)}`,
-              number,
-              name:old?.name || `Alue ${number}`,
-              definitionArea,
-              postalCodes:[...(POSTAL_CODES_BY_AREA[definitionArea] || [])],
-              vehicleId:vehicle.id,
-              assignmentType,
-              active:old?.active !== false
-            });
-          });
-        });
-      });
-      return records;
-    }
-
-    function normalizeDispatcherSettings(value, legacyFleet) {
-      const sourceVehicles = Array.isArray(value?.vehicles) && value.vehicles.length ? value.vehicles : legacyFleet;
-      const vehicles = sourceVehicles.map(vehicle => ({...normalizeVehicle(vehicle, false), removed:!!vehicle.removed}));
-      const sourceAreas = Array.isArray(value?.areas) ? value.areas : migratedAreaRecords(vehicles);
-      const areas = sourceAreas.map((record, index) => {
-        const number = Math.max(1, Number(record.number) || index + 1);
-        const definitionArea = ALL_AREAS.includes(record.definitionArea) ? record.definitionArea : ALL_AREAS[0];
-        return {
-          id:record.id || `area-${stableInfoHash(`${number}|${record.vehicleId || "missing"}|${definitionArea}|${record.assignmentType || "primary"}`)}`,
-          number,
-          name:String(record.name || `Alue ${number}`).trim() || `Alue ${number}`,
-          definitionArea,
-          postalCodes:[...(POSTAL_CODES_BY_AREA[definitionArea] || [])],
-          vehicleId:String(record.vehicleId || ""),
-          assignmentType:record.assignmentType === "balance" ? "balance" : "primary",
-          active:record.active !== false
-        };
-      });
-      return {version:1, vehicles, areas, migratedAt:value?.migratedAt || new Date().toISOString()};
-    }
-
-    function loadDispatcherSettings(legacyFleet) {
-      try {
-        const saved = JSON.parse(localStorage.getItem(DISPATCHER_SETTINGS_STORAGE_KEY) || "null");
-        if (saved?.version === 1) return normalizeDispatcherSettings(saved, legacyFleet);
-      } catch (_) { /* Vaurioitunut uusi asetustallennus korvataan turvallisella migraatiolla. */ }
-      const migrated = normalizeDispatcherSettings(null, legacyFleet);
-      try { localStorage.setItem(DISPATCHER_SETTINGS_STORAGE_KEY, JSON.stringify(migrated)); } catch (_) {}
-      return migrated;
-    }
-
-    function fleetFromDispatcherSettings(settings) {
-      const areasByVehicle = new Map();
-      settings.areas.filter(record => record.active !== false).forEach(record => {
-        if (!areasByVehicle.has(record.vehicleId)) areasByVehicle.set(record.vehicleId, {primary:[], balance:[]});
-        const target = areasByVehicle.get(record.vehicleId);
-        const list = record.assignmentType === "balance" ? target.balance : target.primary;
-        if (!list.includes(record.definitionArea)) list.push(record.definitionArea);
-      });
-      return settings.vehicles.filter(vehicle => !vehicle.removed).map(vehicle => normalizeVehicle({
-        ...vehicle,
-        areas:areasByVehicle.get(vehicle.id)?.primary || [],
-        balanceAreas:areasByVehicle.get(vehicle.id)?.balance || []
-      }, false));
-    }
-
-    function persistDispatcherSettings() {
-      try {
-        localStorage.setItem(DISPATCHER_SETTINGS_STORAGE_KEY, JSON.stringify(dispatcherSettings));
-        localStorage.setItem("lahetejako_fleet", JSON.stringify(fleet));
-      } catch (_) {}
-    }
-
-    function reconcileDispatcherSettingsFromFleet() {
-      if (!dispatcherSettings) return;
-      fleet.forEach(vehicle => {
-        const current = dispatcherSettings.vehicles.find(item => item.id === vehicle.id) || dispatcherSettings.vehicles.find(item => item.plate === vehicle.plate);
-        if (current) Object.assign(current, {...vehicle, areas:undefined, balanceAreas:undefined, removed:false});
-        else dispatcherSettings.vehicles.push({...vehicle, areas:undefined, balanceAreas:undefined, removed:false});
-      });
-      dispatcherSettings.areas = migratedAreaRecords(fleet, dispatcherSettings.areas);
-    }
-
     function saveFleet() {
-      reconcileDispatcherSettingsFromFleet();
-      persistDispatcherSettings();
+      try { localStorage.setItem("lahetejako_fleet", JSON.stringify(fleet)); } catch (_) {}
     }
 
     let fleet = loadFleet();
-    let dispatcherSettings = loadDispatcherSettings(fleet);
-    fleet = fleetFromDispatcherSettings(dispatcherSettings);
-    persistDispatcherSettings();
     let selectedPlate = fleet.find(v => v.active)?.plate || fleet[0]?.plate || null;
     const DELIVERY_RULES_STORAGE_KEY = "lahetejako_delivery_vehicle_rules_v1";
     const DISPATCH_LEARNING_STORAGE_KEY = "lahetejako_dispatch_learning_v1";
@@ -8139,8 +8028,6 @@
     const btnDispatcherSettings = document.getElementById("btnDispatcherSettings");
     const btnCloseDispatcherSettings = document.getElementById("btnCloseDispatcherSettings");
     const btnDoneDispatcherSettings = document.getElementById("btnDoneDispatcherSettings");
-    const btnAddDispatcherArea = document.getElementById("btnAddDispatcherArea");
-    const btnAddDispatcherVehicle = document.getElementById("btnAddDispatcherVehicle");
     const listCard = document.getElementById("listCard");
     const driversCard = document.getElementById("driversCard");
     const stopsBody = document.getElementById("stopsBody");
@@ -9361,9 +9248,9 @@
       mapAssignVehicle.value = activeFleet.some(vehicle => vehicle.plate === previous) ? previous : (activeFleet[0]?.plate || "");
     }
 
-    function renderLegacyFleetUI() {
+    function renderFleetUI() {
       refreshMapAssignVehicleSelect();
-      fleetList.innerHTML = fleet.map(v => {
+      fleetList.innerHTML = fleet.map((v, index) => {
         const primary = (v.areas && v.areas.length) ? v.areas.join(", ") : "–";
         const bal = (v.balanceAreas && v.balanceAreas.length) ? v.balanceAreas.join(", ") : "–";
         const capacityUnit = capacityUnitLabel(v);
@@ -9371,9 +9258,9 @@
         return `
           <div class="fleet-row ${v.active ? "" : "inactive"} ${selectedPlate === v.plate ? "selected" : ""}" data-plate="${v.plate}">
             <input type="checkbox" class="fleet-active" data-plate="${v.plate}" ${v.active ? "checked" : ""} title="Töissä" />
-            <div class="fleet-plate">${v.plate}</div>
+            <div class="fleet-plate"><div class="dispatcher-settings-slot-title">Alue ${index + 1}</div>${v.plate}</div>
             <div class="fleet-areas"><span title="Pääalueet">📍 ${primary}</span><br><span title="Tasausalueet" style="opacity:0.85">⚖ ${bal}</span></div>
-            <div title="${capacityTitle}">
+            <div class="fleet-capacity-controls" title="${capacityTitle}">
               <div style="margin-bottom:0.2rem;text-align:center;color:var(--muted);font-size:0.72rem;">Kapasiteetti</div>
               <input type="number" class="fleet-cap" data-plate="${v.plate}" min="0.5" max="100" step="0.1" value="${v.capacity}" title="${capacityTitle}" />
               <div style="margin-top:0.2rem;text-align:center;color:var(--muted);font-size:0.72rem;">${capacityUnit}</div>
@@ -9432,7 +9319,6 @@
       }
 
       renderAreaControls();
-      setTimeout(() => initAreaMap(), 50);
     }
 
     function dispatcherAssignedPlate(stop) {
@@ -9610,7 +9496,7 @@
       ));
     }
 
-    function toggleLegacyAreaForSelected(area) {
+    function toggleAreaForSelected(area) {
       // Karttaklikkaus: vaihda pääalue-rastia
       const veh = fleet.find(x => x.plate === selectedPlate);
       if (!veh) {
@@ -9626,9 +9512,10 @@
       renderFleetUI();
     }
 
-    function renderLegacyAreaControls() {
+    function renderAreaControls() {
       const v = fleet.find(x => x.plate === selectedPlate);
-      selectedVehicleLabel.textContent = v ? v.plate : "valitse auto";
+      const slotIndex = v ? fleet.indexOf(v) : -1;
+      selectedVehicleLabel.textContent = v ? `Alue ${slotIndex + 1} · ${v.plate}` : "valitse sloti";
       const filterTerm = String(areaFilterInput?.value || "").trim().toLocaleLowerCase("fi");
 
       let html = `<div style="font-size:0.75rem; color:var(--muted); margin-bottom:0.5rem; display:grid; grid-template-columns:1fr 52px 52px; gap:0.25rem;">
@@ -9693,164 +9580,25 @@
       });
     }
 
-    function applyDispatcherSettingsChanges({render = true} = {}) {
-      fleet = fleetFromDispatcherSettings(dispatcherSettings);
-      if (!fleet.some(vehicle => vehicle.plate === selectedPlate)) selectedPlate = fleet.find(vehicle => vehicle.active)?.plate || fleet[0]?.plate || null;
-      persistDispatcherSettings();
-      if (render) {
-        renderFleetUI();
-        renderAreaControls();
-        refreshMapAssignVehicleSelect();
-        updateAreaMap();
-        if (drivers.length) renderList();
-      }
-    }
-
-    function renderFleetUI() {
-      refreshMapAssignVehicleSelect();
-      const visibleVehicles = dispatcherSettings.vehicles.filter(vehicle => !vehicle.removed);
-      fleetList.innerHTML = visibleVehicles.length ? visibleVehicles.map(vehicle => {
-        const primaryCount = dispatcherSettings.areas.filter(area => area.active !== false && area.vehicleId === vehicle.id && area.assignmentType === "primary").length;
-        const balanceCount = dispatcherSettings.areas.filter(area => area.active !== false && area.vehicleId === vehicle.id && area.assignmentType === "balance").length;
-        return `<div class="dynamic-area-row" data-vehicle-id="${escapeHtml(vehicle.id)}">
-          <div class="vehicle-editor-grid">
-            <label>Rekisterinumero<input class="registry-plate" type="text" value="${escapeHtml(vehicle.plate)}" autocomplete="off"></label>
-            <label>Kapasiteetti<input class="registry-capacity" type="number" min="0.5" step="0.1" value="${vehicle.capacity}"></label>
-            <label>Kapasiteetin tyyppi<select class="registry-capacity-type"><option value="pallets" ${vehicle.capacityType !== "volume" ? "selected" : ""}>Lavapaikat</option><option value="volume" ${vehicle.capacityType === "volume" ? "selected" : ""}>Tilavuus m³</option></select></label>
-            <label>Keikka enintään m³<input class="registry-max-volume" type="number" min="0" step="0.1" value="${vehicle.maxJobVolume > 0 ? vehicle.maxJobVolume : ""}" placeholder="Ei rajaa"></label>
-            <button class="btn btn-secondary registry-remove" type="button" title="Poista ajoneuvo käytöstä">Poista</button>
-          </div>
-          <label style="display:flex;align-items:center;gap:.5rem;margin-top:.6rem;"><input class="registry-active" type="checkbox" style="width:auto;" ${vehicle.active ? "checked" : ""}> Käytössä</label>
-          <div class="modal-file-meta" style="margin-top:.35rem;">Pääalueita ${primaryCount} · tasausalueita ${balanceCount} · pysyvä tunniste ${escapeHtml(vehicle.id)}</div>
-        </div>`;
-      }).join("") : `<div class="modal-file-meta">Ajoneuvoja ei ole. Lisää vähintään yksi ajoneuvo.</div>`;
-
-      fleetList.querySelectorAll("[data-vehicle-id]").forEach(row => {
-        const vehicle = dispatcherSettings.vehicles.find(item => item.id === row.dataset.vehicleId);
-        if (!vehicle) return;
-        row.querySelector(".registry-plate").addEventListener("change", event => {
-          const plate = String(event.target.value || "").trim().toUpperCase();
-          if (!plate || dispatcherSettings.vehicles.some(item => !item.removed && item.id !== vehicle.id && item.plate === plate)) {
-            alert("Anna yksilöllinen rekisterinumero.");
-            event.target.value = vehicle.plate;
-            return;
-          }
-          const oldPlate = vehicle.plate;
-          vehicle.plate = plate;
-          if (selectedPlate === oldPlate) selectedPlate = plate;
-          applyDispatcherSettingsChanges();
-        });
-        row.querySelector(".registry-capacity").addEventListener("change", event => { vehicle.capacity = Math.max(.5, Number(event.target.value) || 1); applyDispatcherSettingsChanges(); });
-        row.querySelector(".registry-capacity-type").addEventListener("change", event => { vehicle.capacityType = event.target.value === "volume" ? "volume" : "pallets"; applyDispatcherSettingsChanges(); });
-        row.querySelector(".registry-max-volume").addEventListener("change", event => { vehicle.maxJobVolume = Math.max(0, Number(event.target.value) || 0); applyDispatcherSettingsChanges(); });
-        row.querySelector(".registry-active").addEventListener("change", event => { vehicle.active = event.target.checked; applyDispatcherSettingsChanges(); });
-        row.querySelector(".registry-remove").addEventListener("click", () => {
-          const references = dispatcherSettings.areas.filter(area => area.vehicleId === vehicle.id).length;
-          if (!confirm(references ? `Ajoneuvo on valittu ${references} alueelle. Poistetaanko se käytöstä? Alueissa näytetään Ajoneuvo puuttuu, kunnes valitset uuden.` : "Poistetaanko ajoneuvo?")) return;
-          vehicle.active = false;
-          vehicle.removed = true;
-          applyDispatcherSettingsChanges();
-        });
-      });
-    }
-
-    function renderAreaControls() {
-      const filterTerm = String(areaFilterInput?.value || "").trim().toLocaleLowerCase("fi");
-      const activeVehicles = dispatcherSettings.vehicles.filter(vehicle => !vehicle.removed && vehicle.active);
-      const rows = dispatcherSettings.areas.filter(record => record.active !== false).sort((a,b) => a.number - b.number).filter(record => {
-        const vehicle = dispatcherSettings.vehicles.find(item => item.id === record.vehicleId);
-        const haystack = `${record.name} ${record.definitionArea} ${(record.postalCodes || []).join(" ")} ${vehicle?.plate || "Ajoneuvo puuttuu"}`.toLocaleLowerCase("fi");
-        return !filterTerm || haystack.includes(filterTerm);
-      });
-      areaCheckboxes.innerHTML = rows.length ? rows.map(record => {
-        const assigned = dispatcherSettings.vehicles.find(vehicle => !vehicle.removed && vehicle.id === record.vehicleId);
-        const definitionOptions = ALL_AREAS.map(area => `<option value="${escapeHtml(area)}" ${area === record.definitionArea ? "selected" : ""}>${escapeHtml(area)} · ${escapeHtml((POSTAL_CODES_BY_AREA[area] || []).join(", "))}</option>`).join("");
-        const inactiveAssignedOption = assigned && !assigned.active ? `<option value="${escapeHtml(assigned.id)}" selected>${escapeHtml(assigned.plate)} (ei käytössä)</option>` : "";
-        const vehicleOptions = `${assigned ? inactiveAssignedOption : `<option value="" selected>Ajoneuvo puuttuu</option>`}${activeVehicles.map(vehicle => `<option value="${escapeHtml(vehicle.id)}" ${vehicle.id === record.vehicleId ? "selected" : ""}>${escapeHtml(vehicle.plate)}</option>`).join("")}`;
-        return `<div class="dynamic-area-row" data-area-record-id="${escapeHtml(record.id)}">
-          <div class="dynamic-area-grid">
-            <label>Alueen nimi<input class="dynamic-area-name" type="text" value="${escapeHtml(record.name)}"></label>
-            <label>Aluemääritys<select class="dynamic-area-definition">${definitionOptions}</select></label>
-            <label>Ajoneuvo<select class="dynamic-area-vehicle">${vehicleOptions}</select></label>
-            <label>Käyttö jaossa<select class="dynamic-area-type"><option value="primary" ${record.assignmentType === "primary" ? "selected" : ""}>Pääalue</option><option value="balance" ${record.assignmentType === "balance" ? "selected" : ""}>Tasausalue</option></select></label>
-            <button class="btn btn-secondary dynamic-area-remove" type="button">Poista</button>
-          </div>
-          <div class="modal-file-meta" style="margin-top:.4rem;">ID ${escapeHtml(record.id)} · ${(record.postalCodes || []).length ? escapeHtml(record.postalCodes.join(", ")) : "Ei postinumeroita"}${assigned ? "" : " · ⚠ Ajoneuvo puuttuu – valitse uusi"}</div>
-        </div>`;
-      }).join("") : `<div class="modal-file-meta">Hakua vastaavia alueita ei ole.</div>`;
-
-      areaCheckboxes.querySelectorAll("[data-area-record-id]").forEach(row => {
-        const record = dispatcherSettings.areas.find(item => item.id === row.dataset.areaRecordId);
-        if (!record) return;
-        row.querySelector(".dynamic-area-name").addEventListener("change", event => { record.name = String(event.target.value || "").trim() || `Alue ${record.number}`; persistDispatcherSettings(); renderAreaControls(); });
-        row.querySelector(".dynamic-area-definition").addEventListener("change", event => { record.definitionArea = event.target.value; record.postalCodes = [...(POSTAL_CODES_BY_AREA[record.definitionArea] || [])]; applyDispatcherSettingsChanges(); });
-        row.querySelector(".dynamic-area-vehicle").addEventListener("change", event => { record.vehicleId = event.target.value; applyDispatcherSettingsChanges(); });
-        row.querySelector(".dynamic-area-type").addEventListener("change", event => { record.assignmentType = event.target.value === "balance" ? "balance" : "primary"; applyDispatcherSettingsChanges(); });
-        row.querySelector(".dynamic-area-remove").addEventListener("click", () => { if (confirm(`Poistetaanko ${record.name}?`)) { dispatcherSettings.areas = dispatcherSettings.areas.filter(item => item.id !== record.id); applyDispatcherSettingsChanges(); } });
-      });
-    }
-
-    function toggleAreaForSelected(area) {
-      const vehicle = dispatcherSettings.vehicles.find(item => !item.removed && item.plate === selectedPlate);
-      if (!vehicle) return alert("Valitse ensin ajoneuvo Ajoneuvot-asetuksista.");
-      const existing = dispatcherSettings.areas.find(record => record.active !== false && record.vehicleId === vehicle.id && record.definitionArea === area && record.assignmentType === "primary");
-      if (existing) dispatcherSettings.areas = dispatcherSettings.areas.filter(record => record.id !== existing.id);
-      else {
-        const number = nextDispatcherAreaNumber(dispatcherSettings.areas);
-        dispatcherSettings.areas.push({id:`area-${crypto.randomUUID?.() || stableInfoHash(`${Date.now()}|${area}`)}`, number, name:`Alue ${number}`, definitionArea:area, postalCodes:[...(POSTAL_CODES_BY_AREA[area] || [])], vehicleId:vehicle.id, assignmentType:"primary", active:true});
-      }
-      applyDispatcherSettingsChanges();
-    }
-
-    areaFilterInput?.addEventListener("input", renderAreaControls);
-
-    function showDispatcherSettingsTab(tab) {
-      document.querySelectorAll("[data-dispatcher-settings-panel]").forEach(panel => { panel.hidden = panel.dataset.dispatcherSettingsPanel !== tab; });
-      document.querySelectorAll("[data-dispatcher-settings-tab]").forEach(button => {
-        const active = button.dataset.dispatcherSettingsTab === tab;
-        button.classList.toggle("active", active);
-        button.setAttribute("aria-selected", String(active));
-      });
-      if (tab === "areas") {
-        renderAreaControls();
-        setTimeout(initAreaMap, 80);
-      } else renderFleetUI();
-    }
-
     function openDispatcherSettings() {
       renderFleetUI();
       renderAreaControls();
       dispatcherSettingsModal.classList.add("open");
-      showDispatcherSettingsTab("areas");
+      setTimeout(initAreaMap, 80);
     }
 
     function closeDispatcherSettings() {
       dispatcherSettingsModal.classList.remove("open");
-      if (areaMap) { try { areaMap.remove(); } catch (_) {} areaMap = null; areaMarkers = []; }
     }
 
     btnDispatcherSettings.addEventListener("click", openDispatcherSettings);
     btnCloseDispatcherSettings.addEventListener("click", closeDispatcherSettings);
     btnDoneDispatcherSettings.addEventListener("click", closeDispatcherSettings);
-    dispatcherSettingsModal.addEventListener("click", event => { if (event.target === dispatcherSettingsModal) closeDispatcherSettings(); });
-    document.querySelectorAll("[data-dispatcher-settings-tab]").forEach(button => button.addEventListener("click", () => showDispatcherSettingsTab(button.dataset.dispatcherSettingsTab)));
-
-    btnAddDispatcherArea.addEventListener("click", () => {
-      const number = nextDispatcherAreaNumber(dispatcherSettings.areas);
-      const vehicle = dispatcherSettings.vehicles.find(item => !item.removed && item.active) || dispatcherSettings.vehicles.find(item => !item.removed);
-      const definitionArea = ALL_AREAS.find(area => !dispatcherSettings.areas.some(record => record.active !== false && record.definitionArea === area && record.vehicleId === vehicle?.id && record.assignmentType === "primary")) || ALL_AREAS[0];
-      dispatcherSettings.areas.push({id:`area-${crypto.randomUUID?.() || stableInfoHash(`${Date.now()}|${number}`)}`, number, name:`Alue ${number}`, definitionArea, postalCodes:[...(POSTAL_CODES_BY_AREA[definitionArea] || [])], vehicleId:vehicle?.id || "", assignmentType:"primary", active:true});
-      applyDispatcherSettingsChanges();
+    dispatcherSettingsModal.addEventListener("click", event => {
+      if (event.target === dispatcherSettingsModal) closeDispatcherSettings();
     });
 
-    btnAddDispatcherVehicle.addEventListener("click", () => {
-      let index = 1;
-      while (dispatcherSettings.vehicles.some(vehicle => !vehicle.removed && vehicle.plate === `UUSI-${index}`)) index++;
-      const plate = `UUSI-${index}`;
-      dispatcherSettings.vehicles.push({id:`vehicle-${crypto.randomUUID?.() || stableInfoHash(`${Date.now()}|${plate}`)}`, plate, capacity:18, capacityType:"pallets", maxJobVolume:0, active:true, removed:false, startAddress:DEFAULT_DEPOT_ADDRESS, homeAddress:DEFAULT_DEPOT_ADDRESS});
-      applyDispatcherSettingsChanges();
-      showDispatcherSettingsTab("vehicles");
-    });
+    areaFilterInput?.addEventListener("input", renderAreaControls);
 
     function initAreaMap() {
       const el = document.getElementById("areaMap");
@@ -9923,12 +9671,9 @@
     document.getElementById("btnResetFleet")?.addEventListener("click", () => {
       if (!confirm("Palautetaanko oletuskalusto ja alueet?")) return;
       fleet = DEFAULT_FLEET.map(vehicle => normalizeVehicle(vehicle, false));
-      dispatcherSettings = normalizeDispatcherSettings(null, fleet);
-      fleet = fleetFromDispatcherSettings(dispatcherSettings);
       selectedPlate = fleet[0].plate;
-      persistDispatcherSettings();
+      saveFleet();
       renderFleetUI();
-      renderAreaControls();
       setTimeout(() => initAreaMap(), 100);
     });
 
@@ -9956,10 +9701,8 @@
           }
         });
         drivers = activeFleet.map(v => ({
-          id: v.id,
           name: v.plate,
           capacity: v.capacity,
-          capacityType: v.capacityType,
           maxJobVolume: Math.max(0, Number(v.maxJobVolume) || 0),
           preferredAreas: new Set(v.areas || []),
           balanceAreas: new Set(v.balanceAreas || []),
