@@ -1,8 +1,28 @@
-# Lähetejako v1.88
+# Lähetejako v1.90
 
 **Tekijä:** Teemu H. Fingerroos
 
 Selainpohjainen työkalu, jolla jaat Pamark-tyyliset lähetteet (PDF) kuljettajien kesken.
+
+## Versio 1.90
+
+- Kuljetusvaiheen tekninen PDF-tallennuslaatikko on poistettu päänäkymästä. Samat tiedostonimi-, laitetallennus-, kansio-, Drive-polku- ja synkronointitiedot löytyvät kuljettajan Asetukset-valikon PDF-tallennus-kohdasta.
+- Kuljetuksen alapalkissa ovat kompaktit **💾 PDF**, **💾 ☁ PDF** ja **⚙**. Ne käyttävät samoja paikallisen PDF:n tallennus-, Drive-vienti- ja asetusfunktioita kuin aikaisemmat painikkeet.
+- Kuljetusnäkymän välit on tiivistetty tärkeää keikkatekstiä pienentämättä. Android-kokoisella näytöllä alapalkki pysyy ensisijaisesti yhdellä rivillä eikä aiheuta vaakavieritystä.
+- Ajojärjestelijän päänäkymässä on Asetukset-ratas. Ajoneuvot ja aluevalinnat on siirretty sen Alueet- ja Ajoneuvot-välilehdille.
+- Ajojärjestelijän asetukset tallennetaan rakenteeseen `lahetejako_dispatcher_settings_v1`. Ajoneuvolla on pysyvä ID, rekisterinumero, aktiivisuustila, kapasiteetti, kapasiteettityyppi ja yksittäisen keikan tilavuusraja.
+- Jokainen alue–ajoneuvo-yhteys on oma numeroitu tietueensa, jolla on pysyvä ID, nimi, nykyinen postinumeroaluemääritys, ajoneuvon ID sekä pää-/tasausalueen tyyppi. Alueita ja ajoneuvoja voi lisätä, muokata ja poistaa käytöstä ilman kiinteää lukumäärää.
+- Sama maantieteellinen alue voidaan säilyttää usean auton käytössä erillisinä pää- tai tasausaluetietueina. Tämä säilyttää esimerkiksi tarkoitukselliset päällekkäisyydet ja nykyisen jakoalgoritmin toiminnan.
+- Jos alueeseen liitetty ajoneuvo poistetaan, alue säilyy ja näyttää **Ajoneuvo puuttuu**. Uusi ajoneuvo valitaan pudotusvalikosta.
+- Ensimmäinen käynnistys migroi nykyisen `lahetejako_fleet`-kaluston, kapasiteetit sekä pää- ja tasausalueet uuteen malliin. Uusi asetustallennus estää migraation toistamisen ja kaksoiskappaleet.
+- Jakoalgoritmi käyttää edelleen olemassa olevaa `fleet`-rakennetta, joka muodostetaan uudesta rekisteristä. PDF-, reitti-, lastaus-, kuljetus-, kuittaus-, kartta-, navigointi-, Drive- ja AppInfo-toimintoja ei korvattu.
+
+## Versio 1.89
+
+- Kuljetusvaiheen viimeisellä keikalla näytetään aina **Päivän päätös**, myös silloin kun kuljetusvaiheeseen on siirrytty suoraan vaihevalitsimesta tai palautetusta työtilasta.
+- Aikaisemmin painike riippui lastausvaiheen asettamasta paluuindeksistä. Tyhjä indeksi piilotti painikkeen, vaikka käyttäjä oli päivän viimeisellä keikalla.
+- Viimeinen kuorma tunnistetaan nyt erikseen aktiivisen kuorman perusteella. Suora koko päivän kuljetusnäkymä tulkitaan päivän viimeiseksi kuljetukseksi.
+- Päivän päätös tallentaa edelleen PDF:n paikallisesti ja valittuun Drive-kohteeseen sekä synkronoi `AppInfo/asiakkaat.json`-tiedoston.
 
 ## Versio 1.88
 
@@ -157,10 +177,10 @@ Selainpohjainen työkalu, jolla jaat Pamark-tyyliset lähetteet (PDF) kuljettaji
 6. Syötä asiakastunnus ja API-avain Kuljettajan asetuksiin ja paina **Yhdistä Google Drive**. Ohjelma etsii täsmälleen **Rahtikirjat**-nimisen muokattavan kansion automaattisesti. Valitse kansio käsin vain, jos sitä ei löydy tai samannimisiä kansioita on useita.
 7. OAuthin kotisivuksi voi antaa GitHub Pages -osoitteen. Tietosuojaseloste löytyy osoitteesta `privacy.html` ja käyttöehdot osoitteesta `terms.html`.
 
-### v1.88 käyttöön vaiheittain
+### v1.90 käyttöön vaiheittain
 
 1. Pura ZIP ja lataa lahete-jako-app-kansion sisältö GitHub-repositorion juureen. Erillisiä v1.73–v1.75-päivityksiä ei tarvita. Poista GitHubissa oleva vanha irrallinen PDF erikseen, jos et halua sitä julkiseksi; päivityspaketti ei poista repositorion muita tiedostoja.
-2. Tarkista, että sovelluksessa näkyy v1.88. OAuth-sivut toimivat julkaisemisen jälkeen osoitteissa `https://temppa82.github.io/Keikkajako/privacy.html` ja `https://temppa82.github.io/Keikkajako/terms.html`. Lue tekstit ja varmista ylläpitäjän tiedot ennen niiden käyttöä.
+2. Tarkista, että sovelluksessa näkyy v1.90. OAuth-sivut toimivat julkaisemisen jälkeen osoitteissa `https://temppa82.github.io/Keikkajako/privacy.html` ja `https://temppa82.github.io/Keikkajako/terms.html`. Lue tekstit ja varmista ylläpitäjän tiedot ennen niiden käyttöä.
 3. Ota samassa Google Cloud -projektissa käyttöön Gmail API, Google Drive API ja Google Picker API. Käytä samaa OAuth-asiakastunnusta kaikilla kuljettajilla. JavaScript-origin on `https://temppa82.github.io` ilman polkua. Rajaa Pickerin API-avain sivustolle `https://temppa82.github.io/*` ja Google Picker API:lle.
 4. Drive- ja Gmail-luvat kuuluvat Googlen restricted scope -luokkaan. Julkinen käyttö voi vaatia Googlen OAuth-tarkistuksen. Testaustilassa käytä lisättyjä testikäyttäjiä; pelkkä HTML-sivujen julkaisu ei takaa Googlen hyväksyntää.
 5. Yhdistä Drive uudelleen asetuksista ja hyväksy lupa. Ohjelma löytää yhden muokattavan Rahtikirjat-kansion automaattisesti. Jos samannimisiä kansioita on useita, valitse oikea käsin. Jokainen käyttäjä tarvitsee kansion kirjoitusoikeuden. Ohjelma ei muuta kansion jakamisasetuksia.
